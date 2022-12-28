@@ -20,28 +20,12 @@ router.get("/:name", checkForItem, (req, resp, next) => {
     const name = req.params.name;
     const item = itemList.get(name);
     return resp.status(200).json(item);
-    // try {
-    //     if (!item) {
-    //         throw new ExpressError("Invalid item name", 400)
-    //     } else {
-    //         return resp.status(200).json(item)
-    //     }
-    // } catch(err) {
-    //     return next(err)
-    // }
-    // return resp.status(404).json()
 });
 // Update an item
 router.patch("/:name", checkForItem, (req, resp) => {
     const name = req.params.name;
     const item = itemList.get(name);
     return resp.json(itemList.update(item, req.body));
-    if (!item) {
-        return resp.status(404).json();
-    }
-    else {
-        return resp.json(itemList.update(item, req.body));
-    }
 });
 // Remove an item
 router.delete("/:name", checkForItem, (req, resp, next) => {
