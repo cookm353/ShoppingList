@@ -1,8 +1,9 @@
-const { ExpressError } = require('./expressError');
+const ExpressError = require('./expressError');
+const ItemList = require("./items");
+const itemList = new ItemList();
 function checkForItem(req, resp, next) {
+    const item = itemList.get(req.params.name);
     try {
-        const name = req.params.name;
-        const item = items.find(item => item.name === name);
         if (!item) {
             throw new ExpressError("Invalid item name", 400);
         }
@@ -14,4 +15,4 @@ function checkForItem(req, resp, next) {
         return next(err);
     }
 }
-module.exports = { checkForItem };
+module.exports = checkForItem;
