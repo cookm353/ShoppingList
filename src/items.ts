@@ -1,6 +1,11 @@
-interface Item {
-    "name": string,
-    "price": number
+class Item {
+    name: string
+    price: number
+
+    constructor(name: string, price: number) {
+        this.name = name
+        this.price = price
+    }
 }
 
 class ItemList {
@@ -8,10 +13,10 @@ class ItemList {
     items: Array<Item> = []
     
     constructor() {
-        this.items = [
-            {"name": "popsicle", "price": 1.45},
-            {"name": "Cheerios", "price": 3.40}
-        ]
+        const popsicle = new Item("popsicle", 1.45)
+        const cheerios = new Item("Cheerios", 3.40)
+        this.items.push(popsicle)
+        this.items.push(cheerios)
     }
 
     add(name: string, price: number): object {

@@ -1,11 +1,19 @@
+class Item {
+    name;
+    price;
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+}
 class ItemList {
     /* Class representing a shopping list */
     items = [];
     constructor() {
-        this.items = [
-            { "name": "popsicle", "price": 1.45 },
-            { "name": "Cheerios", "price": 3.40 }
-        ];
+        const popsicle = new Item("popsicle", 1.45);
+        const cheerios = new Item("Cheerios", 3.40);
+        this.items.push(popsicle);
+        this.items.push(cheerios);
     }
     add(name, price) {
         // Add a new item to the shopping list
