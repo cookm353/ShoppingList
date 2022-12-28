@@ -27,7 +27,7 @@ class ItemList {
 
     get(name: string): Item | undefined {
         // Retrieve an item if it exists
-        console.log("Name: ", name)
+        // console.log("Name: ", name)
         return this.items.find(item => item.name === name)
     }
 
@@ -38,7 +38,6 @@ class ItemList {
 
     update(item: Item, reqBody: object): object {
         // Update an item's properties
-        console.log(reqBody.name)
         if (reqBody.name) {
             item.name = reqBody.name
         }

@@ -1,79 +1,63 @@
 const express = require('express')
-const { checkForItem } = require('./middleware')
+const checkForItem = require('./middleware')
+const ItemList = require("./items")
+const ExpressError = require("./expressError")
 
 const router = express.Router()
-
-interface item {
-    "name": string,
-    "price": number
-}
-
-let items: Array<item> = [
-    {"name": "popsicle", "price": 1.45},
-    {"name": "Cheerios", "price": 3.40}
-]
+const itemList = new ItemList()
 
 // Get all items
 router.get('/', (req, resp, next) => {
-    return resp.json(items)
+    return resp.json(itemList.getAll())
 })
 
 // Add an item
 router.post('/', (req, resp) => {
-    const newItem: item = {
-        "name": req.body.name,
-        "price": req.body.price
-    }
-    items.push(newItem)
+    const name = req.body.name
+    const price = req.body.price
+    const newItem = itemList.add(name, price)
 
     return resp.status(201).json({"added": newItem})
 })
 
 // Get an individual item
-router.get("/:name", (req, resp, next) => {
+router.get("/:name", checkForItem, (req, resp, next) => {
     const name: string = req.params.name
-    const item = items.find(item => item.name === name)
-    
-    if (item) {
-        return resp.status(200).json(item)
-    } else {
-        console.log("Nope!")
-    }
+    const item: Item = itemList.get(name)
+    return resp.status(200).json(item)
+    // try {
+    //     if (!item) {
+    //         throw new ExpressError("Invalid item name", 400)
+    //     } else {
+    //         return resp.status(200).json(item)
+    //     }
+    // } catch(err) {
+    //     return next(err)
+    // }
 
-    return resp.status(404).json()
+    // return resp.status(404).json()
 })
 
 // Update an item
-router.patch("/:name", (req, resp) => {
+router.patch("/:name", checkForItem, (req, resp) => {
     const name: string = req.params.name
-    const newName: string = req.body.name
-    const newPrice: number = req.body.price
-
-    const item = items.find(item => item.name === name)
+    const item: Item = itemList.get(name)
+    return resp.json(itemList.update(item,req.body))
 
     if ( !item ) {
         return resp.status(404).json()
     } else {
-        item.name = newName
-        item.price = newPrice
-    
-        return resp.json({"updated": item})
+        return resp.json(itemList.update(item,req.body))
     }
 })
 
 // Remove an item
-router.delete("/:name", (req, resp, next) => {
+router.delete("/:name", checkForItem, (req, resp, next) => {
     const name: string = req.params.name
-
-    const itemToDelete = items.find(item => item.name === name)
-
-    if (!itemToDelete) {
-        return next()
-    } else {
-        items = items.filter(item => item !== itemToDelete )
-        console.log(items)
-        return resp.json({"message": "Deleted"})
-    }
+    const itemToDelete: Item = itemList.get(name)
+    
+    itemList.remove(itemToDelete)
+    return resp.json({"message": "Deleted"})
 })
 
 module.exports = router

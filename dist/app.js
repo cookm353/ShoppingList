@@ -1,4 +1,4 @@
-const expressError = require('./expressError');
+const ExpressError = require('./expressError');
 const express = require("express");
 const fs = require('fs');
 const process = require('process');

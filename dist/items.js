@@ -18,7 +18,7 @@ class ItemList {
     }
     get(name) {
         // Retrieve an item if it exists
-        console.log("Name: ", name);
+        // console.log("Name: ", name)
         return this.items.find(item => item.name === name);
     }
     getAll() {
@@ -27,7 +27,6 @@ class ItemList {
     }
     update(item, reqBody) {
         // Update an item's properties
-        console.log(reqBody.name);
         if (reqBody.name) {
             item.name = reqBody.name;
         }
