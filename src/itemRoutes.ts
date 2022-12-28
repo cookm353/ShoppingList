@@ -7,17 +7,25 @@ const router = express.Router()
 const itemList = new ItemList()
 
 // Get all items
-router.get('/', (req, resp, next) => {
+router.get('/', (req, resp) => {
     return resp.json(itemList.getAll())
 })
 
 // Add an item
-router.post('/', (req, resp) => {
-    const name = req.body.name
-    const price = req.body.price
-    const newItem = itemList.add(name, price)
-
-    return resp.status(201).json({"added": newItem})
+router.post('/', (req, resp, next) => {
+    try {
+        if (!req.body.name) {
+            throw new ExpressError("Name and price are required", 400)
+        }
+        const name = req.body.name
+        const price = req.body.price
+        const newItem = itemList.add(name, price)
+    
+        return resp.status(201).json({"added": newItem})
+    } catch (err) {
+        next(err)
+    }
+    
 })
 
 // Get an individual item
