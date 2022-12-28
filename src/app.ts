@@ -6,7 +6,6 @@ const itemRoutes = require('./itemRoutes')
 const morgan = require("morgan")
 
 const app = express()
-const port: number = 3000
 
 app.use(express.json())
 app.use('/items', itemRoutes)
@@ -26,6 +25,4 @@ app.use((err, req, resp, next) => {
     return resp.status(status).json({err: { msg, status }})
 })
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
-})
+module.exports = app
